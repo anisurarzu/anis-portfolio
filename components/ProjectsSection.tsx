@@ -1,8 +1,10 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Card, Space, Typography, Tag, Carousel, Skeleton } from "antd";
 import { GithubOutlined, LinkOutlined } from "@ant-design/icons";
-import { motion, Variants } from "framer-motion";
+import { motion, Variants, useScroll, useSpring } from "framer-motion";
 
 const { Title, Text } = Typography;
 const { Meta } = Card;
@@ -130,11 +132,27 @@ export default function ProjectsSection({ active }: { active: boolean }) {
     return () => clearTimeout(timer);
   }, []);
 
+  // Framer Motion scroll progress bar
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
   return (
     <section
       id="projects"
-      className={`py-20 px-4 md:px-8 lg:px-16 ${active ? "block" : "hidden"} `}
+      className={`relative py-20 px-4 md:px-8 lg:px-16 ${
+        active ? "block" : "hidden"
+      }`}
     >
+      {/* Scroll Progress Bar */}
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-1 bg-[#89BF55] z-50 origin-left"
+        style={{ scaleX }}
+      />
+
       <div className="text-center mb-16">
         <Text className="text-[#89BF55] font-medium tracking-wider text-lg uppercase">
           My Work
@@ -148,7 +166,7 @@ export default function ProjectsSection({ active }: { active: boolean }) {
             <TypingTitle />
           </Title>
         </motion.div>
-        <div className="w-20 h-1 bg-[#89BF55] mx-auto mt-4"></div>
+        <div className="w-20 h-1 bg-[#89BF55] mx-auto mt-4" />
       </div>
 
       <div className="grid justify-center grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl mx-auto">

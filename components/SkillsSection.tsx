@@ -12,6 +12,8 @@ import {
   DeploymentUnitOutlined,
   GithubOutlined,
 } from "@ant-design/icons";
+import { motion, useAnimation } from "framer-motion";
+import { useEffect } from "react";
 
 const primaryColor = "#8ABF55"; // Green accent
 
@@ -58,6 +60,74 @@ const skillCategories = [
   },
 ];
 
+function SkillCard({
+  name,
+  icon,
+  level,
+}: {
+  name: string;
+  icon: React.ReactNode;
+  level: number;
+}) {
+  const controls = useAnimation();
+
+  useEffect(() => {
+    controls.start({
+      width: ["0%", `${level}%`],
+      transition: {
+        duration: 2.5,
+        ease: "easeInOut",
+        repeat: Infinity,
+        repeatType: "mirror",
+      },
+    });
+  }, [controls, level]);
+
+  const handleHoverStart = () => {
+    controls.start({
+      width: `${level}%`,
+      transition: { duration: 0.4, ease: "easeOut" },
+    });
+  };
+
+  const handleHoverEnd = () => {
+    controls.start({
+      width: ["0%", `${level}%`],
+      transition: {
+        duration: 2.5,
+        ease: "easeInOut",
+        repeat: Infinity,
+        repeatType: "mirror",
+      },
+    });
+  };
+
+  return (
+    <motion.div
+      className="w-full max-w-[180px] flex flex-col items-center bg-[#141414] p-5 rounded-xl shadow-sm hover:shadow-lg cursor-pointer"
+      initial={{ scale: 1 }}
+      whileHover={{ scale: 1.05 }}
+      onHoverStart={handleHoverStart}
+      onHoverEnd={handleHoverEnd}
+    >
+      <div className="text-3xl mb-3" style={{ color: primaryColor }}>
+        {icon}
+      </div>
+      <span className="text-gray-100 font-medium text-sm mb-2">{name}</span>
+
+      {/* Skill Level Progress Bar */}
+      <div className="w-full bg-gray-700 rounded-full h-2 overflow-hidden">
+        <motion.div
+          className="h-2 rounded-full"
+          style={{ backgroundColor: primaryColor, width: "0%" }}
+          animate={controls}
+        />
+      </div>
+      <span className="text-xs text-gray-400 mt-1">{level}%</span>
+    </motion.div>
+  );
+}
+
 export default function SkillsSection({ active }: { active: boolean }) {
   return (
     <section
@@ -75,9 +145,9 @@ export default function SkillsSection({ active }: { active: boolean }) {
 
         {/* Description */}
         <p className="max-w-3xl mx-auto text-gray-400 mb-16 text-base leading-relaxed text-center">
-          I am from Pakistan and currently living in Karachi. I am doing a
-          Bachelor's in Software Engineering and will graduate in 2021. I'm a
-          UI/UX designer and currently working as a freelance developer.
+          I am from Dhaka, Bangladesh. I completed my Bachelor's in Software
+          Engineering in 2022, and I am currently working as a Software Engineer
+          specializing in Web Development.
         </p>
 
         <div className="flex flex-col items-center">
@@ -100,32 +170,7 @@ export default function SkillsSection({ active }: { active: boolean }) {
               {/* Skills Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5 justify-items-center">
                 {category.skills.map(({ name, icon, level }) => (
-                  <div
-                    key={name}
-                    className="w-full max-w-[180px] flex flex-col items-center bg-[#141414] p-5 rounded-xl hover:scale-105 transition-transform duration-300 shadow-sm hover:shadow-lg "
-                  >
-                    <div
-                      className="text-3xl mb-3"
-                      style={{ color: primaryColor }}
-                    >
-                      {icon}
-                    </div>
-                    <span className="text-gray-100 font-medium text-sm mb-2">
-                      {name}
-                    </span>
-
-                    {/* Skill Level Progress Bar */}
-                    <div className="w-full bg-gray-700 rounded-full h-2">
-                      <div
-                        className="h-2 rounded-full"
-                        style={{
-                          width: `${level}%`,
-                          backgroundColor: primaryColor,
-                        }}
-                      ></div>
-                    </div>
-                    <span className="text-xs text-gray-400 mt-1">{level}%</span>
-                  </div>
+                  <SkillCard key={name} name={name} icon={icon} level={level} />
                 ))}
               </div>
             </div>
