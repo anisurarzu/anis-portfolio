@@ -260,10 +260,10 @@ const projects: Project[] = [
     github: "https://github.com/anisurarzu/nexa-erp",
     isLive: false, // Marked as live project
     images: [
-      "/images/nexa-1.png",
-      "/images/nexa-2.png",
-      "/images/nexa-3.png",
-      "/images/nexa-4.png",
+      "/images/Nexa-1.png",
+      "/images/Nexa-2.png",
+      "/images/Nexa-3.png",
+      "/images/Nexa-4.png",
     ],
   },
   {
