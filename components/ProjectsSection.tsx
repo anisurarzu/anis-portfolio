@@ -11,13 +11,16 @@ import {
   Skeleton,
   Button,
   Modal,
+  Tooltip,
 } from "antd";
 import {
   GithubOutlined,
   LinkOutlined,
   InfoCircleOutlined,
+  EyeOutlined,
 } from "@ant-design/icons";
 import { motion, Variants, useScroll, useSpring } from "framer-motion";
+import * as DevIcons from "devicons-react";
 
 const { Title, Text } = Typography;
 const { Meta } = Card;
@@ -31,12 +34,56 @@ type Project = {
   link?: string;
   github?: string;
   images: string[];
+  isLive?: boolean; // New property to indicate if project is live for clients
+};
+
+// Map technology names to Devicon components
+const technologyIconMap: Record<string, any> = {
+  "React.js": DevIcons.ReactOriginal,
+  "Next.js": DevIcons.NextjsOriginal,
+  "Node.js": DevIcons.NodejsPlain,
+  "Express.js": DevIcons.ExpressOriginal,
+  TypeScript: DevIcons.TypescriptOriginal,
+  MongoDB: DevIcons.MongodbOriginal,
+  "SQL Server": DevIcons.MicrosoftsqlserverOriginal,
+  AWS: DevIcons.AmazonwebservicesOriginalWordmark,
+  Firebase: DevIcons.FirebaseOriginal,
+  "Tailwind CSS": DevIcons.TailwindcssOriginal,
+  Redux: DevIcons.ReduxOriginal,
+  "REST API": DevIcons.ExpressOriginal,
+  Vercel: DevIcons.VercelOriginal,
+  ".NET Core": DevIcons.DotnetcoreOriginal,
+  "Ant Design": DevIcons.AntdesignOriginal,
+  "Java Script": DevIcons.JavascriptOriginal,
+  "Material UI": DevIcons.MaterialuiOriginal,
+};
+
+// For technologies not available in Devicons, we'll use fallbacks
+const fallbackIcons: Record<string, any> = {
+  Vercel: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="black">
+      <path d="M24 22.525H0l12-21.05 12 21.05z" />
+    </svg>
+  ),
+  Render: () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="#46e3b7">
+      <path d="M11.42 5.72l-8.24 14.26H20.9l-8.24-14.26-.24-.42-.24.42zm-6.48 13.04l6.48-11.22 6.48 11.22H4.94z" />
+    </svg>
+  ),
+  PrimeReact: DevIcons.ReactOriginal,
+  "REST API": DevIcons.ExpressOriginal,
+  "Ant Design": () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="#1890ff">
+      <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-18a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12z" />
+    </svg>
+  ),
 };
 
 const projects: Project[] = [
   {
     title: "EBS-365 ERP",
-    description: "Enterprise Resource Planning System",
+    description:
+      "Comprehensive Enterprise Resource Planning for streamlined business operations and improved efficiency.",
     duration: "Apr 2022 – Nov 2024",
     achievements: [
       "Led front-end development of a comprehensive ERP system using React.js and .NET Core, serving multiple enterprises including Dekko Isho Group and Montrims Ltd.",
@@ -45,15 +92,16 @@ const projects: Project[] = [
     ],
     technologies: [
       "React.js",
+      "Prime React",
+      "Tailwind CSS",
       ".NET Core",
       "Redux",
-      "PrimeReact",
       "SQL Server",
       "REST API",
       "AWS",
     ],
     link: "https://demogmt.ebs365.info/",
-    github: "github.com/anisurarzu",
+    isLive: true, // Marked as live project
     images: [
       "/images/erp-1.png",
       "/images/erp-2.png",
@@ -65,25 +113,27 @@ const projects: Project[] = [
   },
   {
     title: "Fast Track Booking",
-    description: "Hotel Booking & Management System",
+    description:
+      "Hotel Booking & Management System – Simplify hotel operations with online booking, reservation tracking, and efficient management tools.",
     duration: "Oct 2024 – Jul 2025",
     achievements: [
       "Developed a full-stack hotel management platform using Next.js, Node.js, and MongoDB, enabling real-time room availability checks, booking, and invoicing.",
       "Built an admin dashboard with reporting features (Excel/PDF exports) and a calendar view for optimized room allocation and conflict reduction.",
-      "Deployed and scaled the system across 5 hotels in Cox’s Bazar, improving operational efficiency by 50%.",
+      "Deployed and scaled the system across 5 hotels in Cox's Bazar, improving operational efficiency by 50%.",
     ],
     technologies: [
       "Next.js",
+      "Tailwind CSS",
+      "Ant Design",
       "Node.js",
       "MongoDB",
       "Express.js",
       "Render",
       "Vercel",
-      "Ant Design",
       "REST API",
     ],
     link: "https://www.fasttrackbookingbd.com/",
-    github: "github.com/anisurarzu",
+    isLive: true, // Marked as live project
     images: [
       "/images/ftb-1.png",
       "/images/ftb-2.png",
@@ -102,16 +152,16 @@ const projects: Project[] = [
     ],
     technologies: [
       "React.js",
+      "Tailwind CSS",
       "Node.js",
       "Express.js",
       "MongoDB",
-      "Tailwind CSS",
       "REST API",
       "Firebase",
       "Render",
     ],
     link: "https://ourdmf.com/",
-    github: "github.com/anisurarzu",
+    isLive: true, // Marked as live project
     images: [
       "/images/dmf-1.png",
       "/images/dmf-2.png",
@@ -126,7 +176,8 @@ const projects: Project[] = [
   },
   {
     title: "Hoktok Fashion",
-    description: "Fashion & Apparel E-Commerce Platform",
+    description:
+      "Fashion & Apparel E-Commerce Platform – A complete solution for online fashion retail, from product catalog to secure payment processing.",
     duration: "Mar 2023 – Present",
     achievements: [
       "Developed a responsive e-commerce platform for fashion and apparel using Next.js and Node.js.",
@@ -137,7 +188,6 @@ const projects: Project[] = [
     ],
     technologies: [
       "Next.js",
-      "React.js",
       "Node.js",
       "Express.js",
       "MongoDB",
@@ -145,8 +195,8 @@ const projects: Project[] = [
       "REST API",
       "Vercel",
     ],
-    link: "https://www.hoktokfashion.com/",
-    github: "github.com/anisurarzu/hoktok-fashion",
+    link: "https://www.hoktok.com.bd/",
+    github: "https://github.com/anisurarzu/Hok-Tok-Client",
     images: [
       "/images/hoktok-1.png",
       "/images/hoktok-3.png",
@@ -167,17 +217,16 @@ const projects: Project[] = [
     ],
     technologies: [
       "Next.js",
-      "React.js",
+      "Tailwind CSS",
       "Node.js",
       "Express.js",
       "MongoDB",
-      "Tailwind CSS",
       "REST API",
       "Vercel",
       "Render",
     ],
-    link: "https://www.fasttrackbookingbd.com/admin",
-    github: "github.com/anisurarzu/ftb-admin",
+    link: "https://www.ftbsoft.com/",
+    isLive: true, // Marked as live project
     images: [
       "/images/ftbadmin-1.png",
       "/images/ftbadmin-2.png",
@@ -199,17 +248,17 @@ const projects: Project[] = [
     ],
     technologies: [
       "Next.js",
-      "React.js",
-      "typeScript",
+      "Tailwind CSS",
+      "TypeScript",
       "Node.js",
       "Express.js",
       "MongoDB",
-      "Tailwind CSS",
       "REST API",
       "vercel",
     ],
-    link: "https://www.nexainventory.com/",
-    github: "github.com/anisurarzu/nexa-inventory",
+    link: "https://nexa-erp.vercel.app/",
+    github: "https://github.com/anisurarzu/nexa-erp",
+    isLive: false, // Marked as live project
     images: [
       "/images/nexa-1.png",
       "/images/nexa-2.png",
@@ -217,10 +266,10 @@ const projects: Project[] = [
       "/images/nexa-4.png",
     ],
   },
-
   {
     title: "Flower Picker",
-    description: "Flower Shop Management Software",
+    description:
+      "Flower Shop Management Software – Manage orders, inventory, and deliveries efficiently for a seamless floral business experience.",
     duration: "May 2023 – Dec 2023",
     achievements: [
       "Developed a complete flower shop management system to manage daily operations efficiently.",
@@ -231,16 +280,17 @@ const projects: Project[] = [
     ],
     technologies: [
       "Next.js",
+      "Tailwind CSS",
       "Node.js",
       "Express.js",
       "MongoDB",
-      "Tailwind CSS",
       "REST API",
       "Vercel",
       "Render",
     ],
-    link: "https://www.flowerpicker.com/",
-    github: "github.com/anisurarzu/flower-picker",
+    link: "https://flower-client-dusky.vercel.app/",
+    github: "https://github.com/anisurarzu/Flower-Client",
+    isLive: false, // Marked as live project
     images: [
       "/images/flower-1.png",
       "/images/flower-2.png",
@@ -250,7 +300,8 @@ const projects: Project[] = [
   },
   {
     title: "Smart Dhopa",
-    description: "Online Laundry Management System",
+    description:
+      "Online Laundry Management System – Streamline laundry operations with order tracking, pickup/delivery scheduling, and customer management.",
     duration: "Jan 2023 – Jun 2023",
     achievements: [
       "Developed an online laundry platform allowing users to create laundry orders based on their location.",
@@ -259,9 +310,17 @@ const projects: Project[] = [
       "Integrated React.js frontend with Firebase backend for real-time order management and notifications.",
       "Optimized turnaround time by automating order tracking and management.",
     ],
-    technologies: ["React.js", "Firebase", "Tailwind CSS", "REST API"],
-    link: "https://www.smartdhopa.com/",
-    github: "github.com/anisurarzu/smart-dhopa",
+    technologies: [
+      "Java Script",
+      "React.js",
+      "Material UI",
+      "Node.js",
+      "Express.js",
+      "MongoDB",
+      "Firebase",
+    ],
+    link: "https://smart-dhopa-online-laundry-app.web.app/",
+    isLive: true, // Marked as live project
     images: [
       "/images/dhopa-1.png",
       "/images/dhopa-2.png",
@@ -279,8 +338,8 @@ const projects: Project[] = [
       "Designed user-friendly layouts to highlight textile collections and company information.",
       "Implemented smooth navigation and responsive design for all devices.",
     ],
-    technologies: ["Next.js", "React.js", "Tailwind CSS", "Vercel"],
-    link: "https://www.lanhongtextile.com/",
+    technologies: ["Next.js", "Tailwind CSS", "Vercel"],
+    link: "https://lanhongtextile.vercel.app/",
     github: "github.com/anisurarzu/lanhong-textile",
     images: [
       "/images/Langhong-1.png",
@@ -302,6 +361,24 @@ const cardVariants: Variants = {
       ease: "easeOut",
     },
   }),
+};
+
+// Helper function to get the appropriate icon component
+const getTechnologyIcon = (tech: string) => {
+  // Check if we have a direct mapping
+  if (technologyIconMap[tech]) {
+    const IconComponent = technologyIconMap[tech];
+    return <IconComponent size="24px" />;
+  }
+
+  // Check for fallback icons
+  if (fallbackIcons[tech]) {
+    const FallbackComponent = fallbackIcons[tech];
+    return <FallbackComponent />;
+  }
+
+  // Default fallback - show the first letter of the technology
+  return <span className="text-xs font-bold">{tech.charAt(0)}</span>;
 };
 
 export default function ProjectsSection({ active }: { active: boolean }) {
@@ -437,17 +514,15 @@ export default function ProjectsSection({ active }: { active: boolean }) {
                   />
 
                   <div className="mt-4 flex-grow">
-                    <Space size={[0, 8]} wrap>
+                    <div className="flex flex-wrap gap-2">
                       {project.technologies.map((tech, i) => (
-                        <Tag
-                          key={i}
-                          color="#111111"
-                          className="text-white rounded-full px-3 py-1 text-xs"
-                        >
-                          {tech}
-                        </Tag>
+                        <Tooltip key={i} title={tech} placement="top">
+                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors">
+                            {getTechnologyIcon(tech)}
+                          </div>
+                        </Tooltip>
                       ))}
-                    </Space>
+                    </div>
                   </div>
 
                   <div className="mt-4 flex justify-center gap-2">
@@ -471,7 +546,17 @@ export default function ProjectsSection({ active }: { active: boolean }) {
                         Visit
                       </Button>
                     )}
-                    {project.github && (
+                    {project.isLive ? (
+                      <Button
+                        type="default"
+                        shape="round"
+                        icon={<EyeOutlined />}
+                        disabled
+                        style={{ cursor: "default" }}
+                      >
+                        Live
+                      </Button>
+                    ) : project.github ? (
                       <Button
                         type="default"
                         shape="round"
@@ -482,7 +567,7 @@ export default function ProjectsSection({ active }: { active: boolean }) {
                       >
                         GitHub
                       </Button>
-                    )}
+                    ) : null}
                   </div>
                 </Card>
               </motion.div>
@@ -496,6 +581,7 @@ export default function ProjectsSection({ active }: { active: boolean }) {
         onCancel={() => setSelectedProject(null)}
         footer={null}
         centered
+        width={800}
       >
         {selectedProject && (
           <div className="space-y-6">
@@ -530,17 +616,23 @@ export default function ProjectsSection({ active }: { active: boolean }) {
               ))}
             </ul>
 
-            {/* Technologies */}
-            <div className="flex flex-wrap gap-2">
-              {selectedProject.technologies.map((tech, i) => (
-                <Tag
-                  key={i}
-                  color="#111111"
-                  className="text-white rounded-full px-3 py-1"
-                >
-                  {tech}
-                </Tag>
-              ))}
+            {/* Technologies with icons */}
+            <div>
+              <p className="font-medium mb-2">Technologies Used:</p>
+              <div className="flex flex-wrap gap-3">
+                {selectedProject.technologies.map((tech, i) => (
+                  <Tooltip key={i} title={tech} placement="top">
+                    <div className="flex flex-col items-center p-2 bg-gray-50 rounded-lg w-16">
+                      <div className="flex items-center justify-center w-10 h-10">
+                        {getTechnologyIcon(tech)}
+                      </div>
+                      <span className="text-xs mt-1 text-center truncate w-full">
+                        {tech.length > 10 ? `${tech.substring(0, 8)}...` : tech}
+                      </span>
+                    </div>
+                  </Tooltip>
+                ))}
+              </div>
             </div>
           </div>
         )}

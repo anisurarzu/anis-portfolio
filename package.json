@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "antd": "^5.26.3",
+    "devicons-react": "^1.5.0",
     "framer-motion": "^12.23.0",
     "next": "15.3.5",
     "react": "^19.0.0",
