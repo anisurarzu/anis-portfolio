@@ -94,7 +94,7 @@ export default function HomeSection({ active }: HomeSectionProps) {
               type="primary"
               size="large"
               icon={<CodeOutlined />}
-              href="#projects"
+              href="#projets"
               className="h-12 px-8 font-bold text-white"
               style={{
                 background: "linear-gradient(90deg,#111111,#333333)",

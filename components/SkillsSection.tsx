@@ -1,81 +1,133 @@
 import { motion } from "framer-motion";
 import { Typography } from "antd";
+import * as DevIcons from "devicons-react";
 
 const { Title, Paragraph } = Typography;
+
+const technologyIconMap = {
+  JavaScript: DevIcons.JavascriptOriginal,
+  TypeScript: DevIcons.TypescriptOriginal,
+  "React.js": DevIcons.ReactOriginal,
+  "Next.js": DevIcons.NextjsOriginal,
+  HTML5: DevIcons.Html5Original,
+  "CSS3/SASS": DevIcons.Css3Original,
+  Redux: DevIcons.ReduxOriginal,
+  "Tailwind CSS": DevIcons.TailwindcssOriginal,
+  Bootstrap: DevIcons.BootstrapPlain,
+  "Material UI": DevIcons.MaterialuiPlain,
+  "Node.js": DevIcons.NodejsPlain,
+  "Express.js": DevIcons.ExpressOriginal,
+  ".NET Core": DevIcons.DotnetcorePlain,
+  MongoDB: DevIcons.MongodbPlain,
+  MySQL: DevIcons.MysqlOriginal,
+  "SQL Server": DevIcons.MicrosoftsqlserverPlain,
+  Git: DevIcons.GitPlain,
+  Docker: DevIcons.DockerPlain,
+  AWS: DevIcons.AmazonwebservicesOriginalWordmark,
+};
 
 const skillCategories = [
   {
     title: "Frontend Development",
     skills: [
-      { name: "JavaScript", level: 90, icon: "devicon-javascript-plain" },
-      { name: "TypeScript", level: 85, icon: "devicon-typescript-plain" },
-      { name: "React.js", level: 90, icon: "devicon-react-original" },
-      { name: "Next.js", level: 85, icon: "devicon-nextjs-plain" },
-      { name: "HTML5", level: 95, icon: "devicon-html5-plain" },
-      { name: "CSS3/SASS", level: 90, icon: "devicon-css3-plain" },
-      { name: "Redux", level: 80, icon: "devicon-redux-original" },
-      { name: "Tailwind CSS", level: 85, icon: "devicon-tailwindcss-plain" },
-      { name: "Bootstrap", level: 80, icon: "devicon-bootstrap-plain" },
-      { name: "Material UI", level: 75, icon: "devicon-materialui-plain" },
+      { name: "JavaScript", level: 90 },
+      { name: "TypeScript", level: 85 },
+      { name: "React.js", level: 90 },
+      { name: "Next.js", level: 90 },
+      { name: "HTML5", level: 95 },
+      { name: "CSS3/SASS", level: 90 },
+      { name: "Redux", level: 80 },
+      { name: "Tailwind CSS", level: 90 },
+      { name: "Bootstrap", level: 90 },
+      { name: "Material UI", level: 80 },
     ],
   },
   {
     title: "Backend Development",
     skills: [
-      { name: "Node.js", level: 85, icon: "devicon-nodejs-plain" },
-      { name: "Express.js", level: 80, icon: "devicon-express-original" },
-      { name: ".NET Core", level: 35, icon: "devicon-dotnetcore-plain" },
+      { name: "Node.js", level: 80 },
+      { name: "Express.js", level: 85 },
+      { name: ".NET Core", level: 50 },
     ],
   },
   {
     title: "Database & Storage",
     skills: [
-      { name: "MongoDB", level: 80, icon: "devicon-mongodb-plain" },
-      { name: "MySQL", level: 65, icon: "devicon-mysql-plain" },
-      {
-        name: "SQL Server",
-        level: 50,
-        icon: "devicon-microsoftsqlserver-plain",
-      },
+      { name: "MongoDB", level: 80 },
+      { name: "MySQL", level: 60 },
+      { name: "SQL Server", level: 60 },
     ],
   },
   {
     title: "Tools & Technologies",
     skills: [
-      { name: "Git", level: 85, icon: "devicon-git-plain" },
-      { name: "Docker", level: 75, icon: "devicon-docker-plain" },
-      { name: "AWS EC2", level: 50, icon: "devicon-amazonwebservices-plain" },
-      { name: "AWS S3", level: 70, icon: "devicon-amazonwebservices-plain" },
+      { name: "Git", level: 85 },
+      { name: "Docker", level: 75 },
+      { name: "AWS", level: 60 },
     ],
   },
 ];
 
-function SkillBar({
-  name,
-  level,
-  icon,
-}: {
-  name: string;
-  level: number;
-  icon: string;
-}) {
+// Helper function to get icon
+const getTechnologyIcon = (tech: string) => {
+  if (technologyIconMap[tech]) {
+    const IconComponent = technologyIconMap[tech];
+    return <IconComponent size="28px" />;
+  }
+  return <span className="text-xs font-bold">{tech.charAt(0)}</span>;
+};
+
+// Circular skill ring
+function SkillRing({ name, level }: { name: string; level: number }) {
+  const getLevelText = () => {
+    if (level >= 85) return "Expert";
+    if (level >= 70) return "Intermediate";
+    return "Beginner";
+  };
+
   return (
-    <div className="w-full mb-4">
-      <div className="flex items-center mb-1">
-        <i className={`${icon} text-lg mr-2 text-gray-700`} />
-        <span className="text-sm font-medium text-gray-700 flex-1">{name}</span>
-        <span className="text-xs text-gray-500">{level}%</span>
-      </div>
-      <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-        <motion.div
-          className="h-2 rounded-full bg-gray-800"
-          initial={{ width: 0 }}
-          whileInView={{ width: `${level}%` }}
-          transition={{ duration: 1, ease: "easeOut" }}
+    <motion.div
+      whileHover={{ scale: 1.08 }}
+      className="flex flex-col items-center justify-center relative w-28 h-28"
+    >
+      <svg className="absolute w-28 h-28 transform -rotate-90">
+        <circle
+          cx="56"
+          cy="56"
+          r="50"
+          stroke="rgba(229,231,235,0.6)"
+          strokeWidth="8"
+          fill="none"
+        />
+        <motion.circle
+          cx="56"
+          cy="56"
+          r="50"
+          stroke="url(#grad)"
+          strokeWidth="8"
+          fill="none"
+          strokeLinecap="round"
+          initial={{ strokeDasharray: "0, 314" }}
+          whileInView={{ strokeDasharray: `${(314 * level) / 100}, 314` }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
           viewport={{ once: true }}
         />
+        <defs>
+          <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#111827" />
+            <stop offset="100%" stopColor="#4b5563" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <div className="z-10 flex flex-col items-center">
+        <div className="text-gray-800">{getTechnologyIcon(name)}</div>
+        <span className="text-xs mt-1 text-gray-700 font-medium">{name}</span>
+        <span className="text-[10px] text-gray-500">{level}%</span>
+        <span className="mt-1 text-[10px] px-2 py-0.5 bg-gray-100 border border-gray-300 rounded-full text-gray-600">
+          {getLevelText()}
+        </span>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -85,71 +137,80 @@ export default function SkillsSection({ active }: { active: boolean }) {
       id="skills"
       className={`relative overflow-hidden ${active ? "block" : "hidden"}`}
       style={{
-        backgroundColor: "#ffffff",
-        paddingTop: "80px",
-        paddingBottom: "80px",
+        background: "linear-gradient(to bottom, #ffffff, #f9fafb)",
+        paddingTop: "100px",
+        paddingBottom: "100px",
         scrollMarginTop: "64px",
       }}
     >
       <div className="max-w-6xl mx-auto px-6">
+        {/* Section Heading */}
         <div className="text-center mb-16">
-          <span className="text-gray-600 font-medium tracking-wider text-lg uppercase">
-            Technical Expertise
+          <span className="text-gray-600 font-semibold tracking-wide uppercase">
+            My Expertise
           </span>
           <Title
             level={2}
-            className="text-gray-900 mt-3 text-3xl md:text-4xl font-bold"
+            className="text-gray-900 mt-3 text-4xl md:text-5xl font-extrabold"
           >
             Skills & Technologies
           </Title>
-          <div className="w-20 h-1 bg-gray-800 mx-auto mt-4" />
+          <div className="w-24 h-1 bg-gray-900 mx-auto mt-4 rounded-full" />
         </div>
 
+        {/* Intro */}
         <div className="max-w-3xl mx-auto mb-16">
-          <Paragraph className="text-gray-600 text-base leading-relaxed text-center">
-            With nearly 4 years of experience in full-stack development, I've
-            worked extensively with modern JavaScript technologies to build
-            scalable web applications.
+          <Paragraph className="text-gray-600 text-lg leading-relaxed text-center">
+            With nearly 4 years of professional experience, I specialize in{" "}
+            <strong>scalable, high-performing web applications</strong> by
+            combining strong frontend design with powerful backend logic.
           </Paragraph>
         </div>
 
+        {/* Categories */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {skillCategories.map((category, index) => (
             <motion.div
               key={index}
-              className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm"
+              className="p-8 rounded-2xl bg-white/90 backdrop-blur border border-gray-300 transition-all"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <Title
-                level={3}
-                className="m-0 text-gray-800 text-lg mb-6 border-b pb-2"
-              >
-                {category.title}
-              </Title>
+              {/* Category Title */}
+              <div className="flex items-center mb-8">
+                <div className="w-2 h-8 bg-gray-900 rounded mr-3"></div>
+                <Title
+                  level={3}
+                  className="m-0 text-gray-900 text-lg font-semibold tracking-wide"
+                >
+                  {category.title}
+                </Title>
+              </div>
 
-              <div className="space-y-2">
-                {category.skills.map(({ name, level, icon }) => (
-                  <SkillBar key={name} name={name} level={level} icon={icon} />
+              {/* Skills */}
+              <div className="flex flex-wrap gap-6 justify-center">
+                {category.skills.map(({ name, level }) => (
+                  <SkillRing key={name} name={name} level={level} />
                 ))}
               </div>
             </motion.div>
           ))}
         </div>
 
+        {/* Soft Skills */}
         <motion.div
-          className="mt-16 p-6 bg-gray-50 rounded-lg border border-gray-200"
+          className="mt-20 p-8 bg-gray-50 rounded-2xl border border-gray-300"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <Title level={4} className="text-gray-800 mb-4 text-center">
+          <Title level={4} className="text-gray-800 mb-6 text-center font-bold">
             Soft Skills
           </Title>
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-4">
             {[
               "Teamwork & Collaboration",
               "Problem Solving",
@@ -157,12 +218,13 @@ export default function SkillsSection({ active }: { active: boolean }) {
               "Adaptability",
               "Analytical Thinking",
             ].map((skill) => (
-              <span
+              <motion.span
                 key={skill}
-                className="px-4 py-2 bg-white border border-gray-300 rounded-full text-sm text-gray-700"
+                whileHover={{ scale: 1.1, y: -2 }}
+                className="px-5 py-2 bg-white border border-gray-300 rounded-full text-sm text-gray-700 font-medium"
               >
                 {skill}
-              </span>
+              </motion.span>
             ))}
           </div>
         </motion.div>
