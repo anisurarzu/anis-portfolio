@@ -16,9 +16,9 @@ export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("home");
 
   return (
-    <Layout className="min-h-screen bg-gray-50">
+    <Layout className="">
       <Head>
-        <title>John Doe | Professional Web Developer</title>
+        <title>Anisur Rahman | Professional Web Developer</title>
         <meta
           name="description"
           content="Professional portfolio of John Doe, Web Developer"
@@ -31,8 +31,8 @@ export default function Portfolio() {
         setActiveSection={setActiveSection}
       />
 
-      <Content className="pt-20 px-4 md:px-8 lg:px-16 xl:px-24">
-        <div className="max-w-7xl mx-auto">
+      <Content className="">
+        <div className=" mx-auto">
           <HomeSection active={activeSection === "home"} />
           <ProjectsSection active={activeSection === "projects"} />
           <ExperienceSection active={activeSection === "experience"} />
