@@ -4,7 +4,11 @@ import * as DevIcons from "devicons-react";
 
 const { Title, Paragraph } = Typography;
 
-const technologyIconMap = {
+// Make technologyIconMap type-safe
+const technologyIconMap: Record<
+  string,
+  React.ComponentType<{ size: string }>
+> = {
   JavaScript: DevIcons.JavascriptOriginal,
   TypeScript: DevIcons.TypescriptOriginal,
   "React.js": DevIcons.ReactOriginal,
@@ -68,16 +72,13 @@ const skillCategories = [
   },
 ];
 
-// Helper function to get icon
+// Helper function to get icon safely
 const getTechnologyIcon = (tech: string) => {
-  if (technologyIconMap[tech]) {
-    const IconComponent = technologyIconMap[tech];
-    return <IconComponent size="28px" />;
-  }
+  const IconComponent = technologyIconMap[tech];
+  if (IconComponent) return <IconComponent size="28px" />;
   return <span className="text-xs font-bold">{tech.charAt(0)}</span>;
 };
 
-// Circular skill ring
 function SkillRing({ name, level }: { name: string; level: number }) {
   const getLevelText = () => {
     if (level >= 85) return "Expert";
@@ -167,7 +168,7 @@ export default function SkillsSection({ active }: { active: boolean }) {
           </Paragraph>
         </div>
 
-        {/* Categories */}
+        {/* Skill Categories */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {skillCategories.map((category, index) => (
             <motion.div
@@ -178,7 +179,6 @@ export default function SkillsSection({ active }: { active: boolean }) {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              {/* Category Title */}
               <div className="flex items-center mb-8">
                 <div className="w-2 h-8 bg-gray-900 rounded mr-3"></div>
                 <Title
@@ -188,8 +188,6 @@ export default function SkillsSection({ active }: { active: boolean }) {
                   {category.title}
                 </Title>
               </div>
-
-              {/* Skills */}
               <div className="flex flex-wrap gap-6 justify-center">
                 {category.skills.map(({ name, level }) => (
                   <SkillRing key={name} name={name} level={level} />
