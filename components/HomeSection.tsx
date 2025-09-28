@@ -1,4 +1,4 @@
-import { Typography, Button, Tag, Tooltip } from "antd";
+import { Typography, Button, Tag } from "antd";
 import {
   CodeOutlined,
   MailOutlined,
@@ -10,9 +10,13 @@ const { Title, Paragraph } = Typography;
 
 type HomeSectionProps = {
   active: boolean;
+  setActiveSection: (key: string) => void;
 };
 
-export default function HomeSection({ active }: HomeSectionProps) {
+export default function HomeSection({
+  active,
+  setActiveSection,
+}: HomeSectionProps) {
   const fullText = "Hi, I'm Anisur Rahman Arzu";
   const subText = "Frontend Software Engineer • React & Next.js Specialist";
 
@@ -20,9 +24,7 @@ export default function HomeSection({ active }: HomeSectionProps) {
     <section
       id="home"
       className={`relative py-32 ${active ? "block" : "hidden"}`}
-      style={{
-        backgroundColor: "#ffffff",
-      }}
+      style={{ backgroundColor: "#ffffff" }}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-16 flex flex-col lg:flex-row items-center gap-16">
         {/* Left Side Web Development Illustration */}
@@ -35,7 +37,7 @@ export default function HomeSection({ active }: HomeSectionProps) {
           <img
             src="https://cdn.dribbble.com/users/1059583/screenshots/4171367/coding-freak.gif"
             alt="Web Development Illustration"
-            className="max-w-md w-full object-contain  rounded-2xl"
+            className="max-w-md w-full object-contain rounded-2xl"
           />
         </motion.div>
 
@@ -87,14 +89,14 @@ export default function HomeSection({ active }: HomeSectionProps) {
             ))}
           </div>
 
-          {/* Buttons with Tooltip */}
+          {/* Buttons */}
           <div className="mt-18 flex flex-wrap gap-4 justify-center lg:justify-start">
-            {/* <Tooltip title="See my projects"> */}
+            {/* View Work Button triggers Skills section */}
             <Button
               type="primary"
               size="large"
               icon={<CodeOutlined />}
-              href="#projets"
+              onClick={() => setActiveSection("skills")}
               className="h-12 px-8 font-bold text-white"
               style={{
                 background: "linear-gradient(90deg,#111111,#333333)",
@@ -103,9 +105,7 @@ export default function HomeSection({ active }: HomeSectionProps) {
             >
               View Work
             </Button>
-            {/* </Tooltip> */}
 
-            {/* <Tooltip title="Get in touch with me"> */}
             <Button
               size="large"
               icon={<MailOutlined />}
@@ -114,18 +114,17 @@ export default function HomeSection({ active }: HomeSectionProps) {
             >
               Let’s Talk
             </Button>
-            {/* </Tooltip> */}
 
-            {/* <Tooltip title="Download my resume"> */}
             <Button
               size="large"
               icon={<DownloadOutlined />}
-              href="/resume.pdf"
+              href="https://drive.google.com/file/d/1UdQKpJHBLMAf6Sus04yq_hiJWjwnSdW2/view?usp=drive_link"
+              target="_blank"
+              rel="noopener noreferrer"
               className="h-12 px-8 font-bold border-2 border-black text-black hover:bg-black hover:text-white transition"
             >
               Download CV
             </Button>
-            {/* </Tooltip> */}
           </div>
         </motion.div>
       </div>

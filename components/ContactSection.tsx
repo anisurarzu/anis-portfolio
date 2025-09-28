@@ -49,8 +49,8 @@ export default function ContactSection({ active }: { active: boolean }) {
     },
     {
       icon: <PhoneOutlined className="text-xl" />,
-      text: "+880 1234 567890",
-      link: "tel:+8801234567890",
+      text: "+880 1789879345",
+      link: "",
     },
     {
       icon: <LinkedinOutlined className="text-xl" />,
