@@ -96,7 +96,7 @@ export default function HomeSection({
               type="primary"
               size="large"
               icon={<CodeOutlined />}
-              onClick={() => setActiveSection("skills")}
+              onClick={() => setActiveSection("projects")}
               className="h-12 px-8 font-bold text-white"
               style={{
                 background: "linear-gradient(90deg,#111111,#333333)",
@@ -109,6 +109,7 @@ export default function HomeSection({
             <Button
               size="large"
               icon={<MailOutlined />}
+              onClick={() => setActiveSection("contact")}
               href="#contact"
               className="h-12 px-8 font-bold border-2 border-black text-black hover:bg-black hover:text-white transition"
             >

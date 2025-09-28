@@ -33,7 +33,10 @@ export default function Portfolio() {
 
       <Content className="">
         <div className=" mx-auto">
-          <HomeSection active={activeSection === "home"} />
+          <HomeSection
+            active={activeSection === "home"}
+            setActiveSection={setActiveSection}
+          />
           <ProjectsSection active={activeSection === "projects"} />
           <ExperienceSection active={activeSection === "experience"} />
           <SkillsSection active={activeSection === "skills"} />
