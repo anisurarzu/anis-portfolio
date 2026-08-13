@@ -8,6 +8,7 @@ import {
   useMotionValue,
   useSpring,
   useTransform,
+  type Variants,
 } from "framer-motion";
 
 type HomeSectionProps = {
@@ -38,7 +39,7 @@ const stats = [
   { value: 5, suffix: "+", label: "Enterprises" },
 ];
 
-const fadeUp = {
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 18 },
   show: (i: number) => ({
     opacity: 1,
