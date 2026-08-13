@@ -1,166 +1,132 @@
 "use client";
 
-import { useState, useEffect, type ReactNode } from "react";
-import {
-  HomeOutlined,
-  CodeOutlined,
-  LaptopOutlined,
-  StarOutlined,
-  MailOutlined,
-} from "@ant-design/icons";
-import { Tooltip } from "antd";
+import { useState } from "react";
+import Image from "next/image";
 
 type HeaderProps = {
   activeSection: string;
-  setActiveSection: (key: string) => void;
+  onNavigate: (id: string) => void;
 };
 
-type MenuItem = {
-  key: string;
-  icon: ReactNode;
-  label: string;
-};
-
-const items: MenuItem[] = [
-  { key: "home", icon: <HomeOutlined />, label: "Home" },
-  { key: "projects", icon: <CodeOutlined />, label: "Projects" },
-  { key: "experience", icon: <LaptopOutlined />, label: "Experience" },
-  { key: "skills", icon: <StarOutlined />, label: "Skills" },
-  { key: "contact", icon: <MailOutlined />, label: "Contact" },
+const items = [
+  { key: "home", label: "Home" },
+  { key: "projects", label: "Work" },
+  { key: "experience", label: "Experience" },
+  { key: "skills", label: "Skills" },
+  { key: "contact", label: "Contact" },
 ];
 
-export default function Header({
-  activeSection,
-  setActiveSection,
-}: HeaderProps) {
-  const [isMobile, setIsMobile] = useState(false);
-  const [expandedKey, setExpandedKey] = useState<string | null>(null);
+export default function Header({ activeSection, onNavigate }: HeaderProps) {
+  const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    function handleResize() {
-      setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth >= 768) setExpandedKey(null);
-    }
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const onSelect = (key: string) => {
-    setExpandedKey(key === expandedKey ? null : key);
-    setActiveSection(key);
+  const handleNav = (key: string) => {
+    onNavigate(key);
+    setOpen(false);
   };
 
   return (
     <>
-      <style>{`
-        .header-container {
-          position: fixed;
-          top: 50%;
-          right: 3%;
-          transform: translateY(-50%);
-          z-index: 9999;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
+      <header className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4">
+        <nav className="glass flex w-full max-w-5xl items-center justify-between rounded-full px-3 py-2 shadow-[0_8px_40px_rgba(0,0,0,0.35)]">
+          <button
+            onClick={() => handleNav("home")}
+            className="flex items-center gap-2 rounded-full px-3 py-1.5"
+            aria-label="Go to home"
+          >
+            <span className="relative h-8 w-8 overflow-hidden rounded-full border border-accent/40">
+              <Image
+                src="/images/anisur.png"
+                alt="Anisur Rahman Arzu"
+                fill
+                className="object-cover object-[center_20%]"
+                sizes="32px"
+              />
+            </span>
+            <span className="hidden sm:block font-display font-semibold tracking-tight">
+              Anisur
+            </span>
+          </button>
 
-        .icon-box {
-          width: 48px;
-          height: 48px;
-          background-color: #333;
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          cursor: pointer;
-          font-weight: 600;
-          transition: all 0.4s ease;
-        }
-
-        .icon-box.expanded {
-          width: 140px;
-          justify-content: flex-start;
-          padding: 0 12px;
-          gap: 8px;
-          background-color: #f0f0f0;
-          color: #333;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        .mobile-menu {
-          display: flex;
-          justify-content: space-around;
-          padding: 8px 0;
-          background-color: #333;
-          height: 64px;
-          align-items: center;
-        }
-
-        .mobile-menu .icon-box {
-          width: 44px;
-          height: 44px;
-          background-color: #555;
-        }
-
-        .mobile-menu .icon-box.expanded {
-          width: 120px;
-        }
-      `}</style>
-
-      {/* Desktop vertical menu */}
-      {!isMobile && (
-        <div className="header-container">
-          {items.map(({ key, icon, label }) => {
-            const isExpanded = expandedKey === key;
-            return (
-              <Tooltip title={label} placement="left" key={key}>
-                <div
-                  className={`icon-box ${isExpanded ? "expanded" : ""}`}
-                  onClick={() => onSelect(key)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") onSelect(key);
-                  }}
-                  aria-pressed={isExpanded}
-                  aria-label={label}
+          <div className="hidden md:flex items-center gap-1">
+            {items.map((item) => {
+              const active = activeSection === item.key;
+              return (
+                <button
+                  key={item.key}
+                  onClick={() => handleNav(item.key)}
+                  className={`relative rounded-full px-4 py-2 text-sm transition-colors ${
+                    active
+                      ? "text-[#04110c]"
+                      : "text-muted hover:text-text"
+                  }`}
                 >
-                  {icon}
-                  {isExpanded && <span>{label}</span>}
-                </div>
-              </Tooltip>
-            );
-          })}
-        </div>
-      )}
+                  {active && (
+                    <span className="absolute inset-0 rounded-full bg-accent" />
+                  )}
+                  <span className="relative z-10">{item.label}</span>
+                </button>
+              );
+            })}
+          </div>
 
-      {/* Mobile bottom menu */}
-      {isMobile && (
-        <nav className="mobile-menu">
-          {items.map(({ key, icon, label }) => {
-            const isExpanded = expandedKey === key;
-            return (
-              <Tooltip title={label} placement="top" key={key}>
-                <div
-                  className={`icon-box ${isExpanded ? "expanded" : ""}`}
-                  onClick={() => onSelect(key)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") onSelect(key);
-                  }}
-                  aria-pressed={isExpanded}
-                  aria-label={label}
-                >
-                  {icon}
-                  {isExpanded && <span>{label}</span>}
-                </div>
-              </Tooltip>
-            );
-          })}
+          <div className="flex items-center gap-2">
+            <a
+              href="https://drive.google.com/file/d/1UdQKpJHBLMAf6Sus04yq_hiJWjwnSdW2/view?usp=drive_link"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:inline-flex rounded-full bg-white/5 px-4 py-2 text-sm font-medium text-text hover:bg-accent hover:text-[#04110c] transition-colors"
+            >
+              Resume
+            </a>
+            <button
+              className="md:hidden flex h-10 w-10 items-center justify-center rounded-full border border-border"
+              onClick={() => setOpen((v) => !v)}
+              aria-label="Toggle menu"
+              aria-expanded={open}
+            >
+              <span className="flex flex-col gap-1.5">
+                <span
+                  className={`h-px w-4 bg-text transition-transform ${
+                    open ? "translate-y-[4px] rotate-45" : ""
+                  }`}
+                />
+                <span
+                  className={`h-px w-4 bg-text transition-transform ${
+                    open ? "-translate-y-[4px] -rotate-45" : ""
+                  }`}
+                />
+              </span>
+            </button>
+          </div>
         </nav>
+      </header>
+
+      {open && (
+        <div className="fixed inset-0 z-40 md:hidden">
+          <button
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setOpen(false)}
+            aria-label="Close menu"
+          />
+          <div className="glass absolute top-20 left-4 right-4 rounded-3xl p-4">
+            {items.map((item) => (
+              <button
+                key={item.key}
+                onClick={() => handleNav(item.key)}
+                className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left ${
+                  activeSection === item.key
+                    ? "bg-accent-dim text-accent"
+                    : "text-text"
+                }`}
+              >
+                {item.label}
+                {activeSection === item.key && (
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
       )}
     </>
   );

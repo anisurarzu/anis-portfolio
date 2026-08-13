@@ -1,246 +1,157 @@
-import { useState } from "react";
-import {
-  Card,
-  Typography,
-  Space,
-  Button,
-  Divider,
-  Form,
-  Input,
-  message,
-} from "antd";
-import {
-  MailOutlined,
-  LinkedinOutlined,
-  GithubOutlined,
-  TwitterOutlined,
-  PhoneOutlined,
-} from "@ant-design/icons";
+"use client";
+
+import { FormEvent, useState } from "react";
 import { motion } from "framer-motion";
+import SectionHeader from "@/components/SectionHeader";
 
-const { Title, Text, Paragraph } = Typography;
-const { TextArea } = Input;
+const contactItems = [
+  {
+    label: "Location",
+    value: "Cologne, Germany",
+    href: "https://maps.google.com/?q=Cologne,+Germany",
+  },
+  {
+    label: "Email",
+    value: "anisurrahman.arzu@gmail.com",
+    href: "mailto:anisurrahman.arzu@gmail.com",
+  },
+  {
+    label: "Phone",
+    value: "+880 1789-879345",
+    href: "tel:+8801789879345",
+  },
+  {
+    label: "LinkedIn",
+    value: "linkedin.com/in/anisurrahman",
+    href: "https://linkedin.com/in/anisurrahman",
+  },
+  {
+    label: "GitHub",
+    value: "github.com/anisurarzu",
+    href: "https://github.com/anisurarzu",
+  },
+  {
+    label: "X / Twitter",
+    value: "@anisur_rahman",
+    href: "https://twitter.com/anisur_rahman",
+  },
+];
 
-const primaryColor = "#111111"; // Black accent
-const secondaryColor = "#6b7280"; // Neutral Gray
+export default function ContactSection() {
+  const [status, setStatus] = useState<"idle" | "sent">("idle");
 
-export default function ContactSection({ active }: { active: boolean }) {
-  const [form] = Form.useForm();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const onFinish = async (values: any) => {
-    setIsSubmitting(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      message.success("Message sent successfully!");
-      form.resetFields();
-    } catch (error) {
-      message.error("Failed to send message. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const name = String(data.get("name") || "");
+    const email = String(data.get("email") || "");
+    const message = String(data.get("message") || "");
+    const subject = encodeURIComponent(`Portfolio inquiry from ${name}`);
+    const body = encodeURIComponent(
+      `Name: ${name}\nEmail: ${email}\n\n${message}`
+    );
+    window.location.href = `mailto:anisurrahman.arzu@gmail.com?subject=${subject}&body=${body}`;
+    setStatus("sent");
+    event.currentTarget.reset();
   };
 
-  const contactItems = [
-    {
-      icon: <MailOutlined className="text-xl" />,
-      text: "anisurrahman.arzu@gmail.com",
-      link: "mailto:anisurrahman.arzu@gmail.com",
-    },
-    {
-      icon: <PhoneOutlined className="text-xl" />,
-      text: "+880 1789879345",
-      link: "",
-    },
-    {
-      icon: <LinkedinOutlined className="text-xl" />,
-      text: "linkedin.com/in/anisurrahman",
-      link: "https://linkedin.com/in/anisurrahman",
-    },
-    {
-      icon: <GithubOutlined className="text-xl" />,
-      text: "github.com/anisurarzu",
-      link: "https://github.com/anisurarzu",
-    },
-    {
-      icon: <TwitterOutlined className="text-xl" />,
-      text: "@anisur_rahman",
-      link: "https://twitter.com/anisur_rahman",
-    },
-  ];
-
   return (
-    <section
-      id="contact"
-      className={`py-20 px-4 md:px-8 lg:px-16 ${
-        active ? "block" : "hidden"
-      } bg-gray-50`}
-    >
-      <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="text-center mb-16">
-            <Text
-              style={{ color: primaryColor }}
-              className="font-medium tracking-wider text-lg uppercase"
-            >
-              Let's Connect
-            </Text>
-            <Title
-              level={2}
-              className="mt-3 text-3xl md:text-4xl font-bold text-gray-900"
-            >
-              Contact Me
-            </Title>
-            <div
-              className="w-20 h-1 mx-auto mt-4 rounded-full"
-              style={{ backgroundColor: primaryColor }}
-            />
-          </div>
-        </motion.div>
+    <section id="contact" className="relative py-24 md:py-32 px-4 md:px-8">
+      <div className="mx-auto max-w-6xl">
+        <SectionHeader
+          index="04"
+          eyebrow="Contact"
+          title="Let’s talk about the next role."
+          description="I am based in Cologne, hold a German Opportunity Card, and am open to full-time frontend and full-stack opportunities. I typically reply within one business day."
+        />
 
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Contact Info */}
+        <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
           <motion.div
-            className="lg:w-1/2"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            initial={{ opacity: 0, x: -16 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="rounded-3xl border border-border bg-white/[0.03] p-7 md:p-8"
           >
-            <Card
-              className="h-full border border-gray-200 bg-white"
-              bodyStyle={{ padding: "32px" }}
-            >
-              <Title level={3} className="mb-6 text-gray-900">
-                Get In Touch
-              </Title>
-              <Paragraph className="text-lg mb-8 text-gray-600">
-                I’m currently available for freelance work and open to new
-                opportunities. Whether you have a question or just want to say
-                hello, feel free to reach out!
-              </Paragraph>
+            <p className="text-sm text-muted">Based in</p>
+            <p className="mt-1 font-display text-2xl font-semibold">
+              Cologne, Germany
+            </p>
+            <p className="mt-4 text-muted leading-relaxed">
+              Opportunity Card (Chancenkarte) holder, authorized to work in
+              Germany and looking for a long-term engineering role. If you are
+              hiring for React, Next.js, or product frontend work, I would like
+              to hear from you.
+            </p>
 
-              <Space direction="vertical" size="middle" className="w-full">
-                {contactItems.map((item, index) => (
-                  <motion.div
-                    key={index}
-                    whileHover={{ x: 6 }}
-                    transition={{ type: "spring", stiffness: 250 }}
-                  >
-                    <a
-                      href={item.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 p-3 rounded-md hover:bg-gray-100 transition-colors"
-                    >
-                      <div style={{ color: primaryColor }}>{item.icon}</div>
-                      <Text className="text-base text-gray-700 hover:text-black transition-colors">
-                        {item.text}
-                      </Text>
-                    </a>
-                  </motion.div>
-                ))}
-              </Space>
-
-              <Divider className="my-8" />
-
-              <Text className="text-gray-500 text-sm">
-                I usually reply within 24 hours on weekdays. For urgent matters,
-                calling is best.
-              </Text>
-            </Card>
+            <div className="mt-8 space-y-3">
+              {contactItems.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target={item.href.startsWith("http") ? "_blank" : undefined}
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between gap-4 rounded-2xl border border-transparent px-3 py-3 transition-colors hover:border-border hover:bg-white/[0.03]"
+                >
+                  <div>
+                    <p className="text-xs uppercase tracking-widest text-muted">
+                      {item.label}
+                    </p>
+                    <p className="mt-1 text-sm text-text">{item.value}</p>
+                  </div>
+                  <span className="text-accent">↗</span>
+                </a>
+              ))}
+            </div>
           </motion.div>
 
-          {/* Contact Form */}
-          <motion.div
-            className="lg:w-1/2"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+          <motion.form
+            initial={{ opacity: 0, x: 16 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            onSubmit={onSubmit}
+            className="rounded-3xl border border-border bg-white/[0.03] p-7 md:p-8"
           >
-            <Card
-              title={
-                <span className="text-gray-900 font-semibold">
-                  Send Me a Message
-                </span>
-              }
-              className="h-full border border-gray-200 bg-white"
-              headStyle={{ borderBottom: 0, padding: "24px 32px 0" }}
-              bodyStyle={{ padding: "0 32px 32px" }}
-            >
-              <Form
-                form={form}
-                name="contact"
-                onFinish={onFinish}
-                layout="vertical"
-                requiredMark="optional"
-              >
-                <Form.Item
+            <h3 className="font-display text-2xl font-semibold">
+              Send a message
+            </h3>
+            <div className="mt-6 space-y-4">
+              <label className="block">
+                <span className="mb-2 block text-sm text-muted">Name</span>
+                <input
                   name="name"
-                  label={<span className="text-gray-700">Your Name</span>}
-                  rules={[
-                    { required: true, message: "Please input your name!" },
-                  ]}
-                >
-                  <Input
-                    size="large"
-                    placeholder="John Smith"
-                    className="py-2 rounded-md border-gray-300 focus:border-black hover:border-black"
-                  />
-                </Form.Item>
-
-                <Form.Item
+                  required
+                  placeholder="Your name"
+                  className="input-field"
+                />
+              </label>
+              <label className="block">
+                <span className="mb-2 block text-sm text-muted">Email</span>
+                <input
                   name="email"
-                  label={<span className="text-gray-700">Your Email</span>}
-                  rules={[
-                    { required: true, message: "Please input your email!" },
-                    { type: "email", message: "Please enter a valid email!" },
-                  ]}
-                >
-                  <Input
-                    size="large"
-                    placeholder="john@example.com"
-                    className="py-2 rounded-md border-gray-300 focus:border-black hover:border-black"
-                  />
-                </Form.Item>
-
-                <Form.Item
+                  type="email"
+                  required
+                  placeholder="you@company.com"
+                  className="input-field"
+                />
+              </label>
+              <label className="block">
+                <span className="mb-2 block text-sm text-muted">Message</span>
+                <textarea
                   name="message"
-                  label={<span className="text-gray-700">Your Message</span>}
-                  rules={[
-                    { required: true, message: "Please input your message!" },
-                  ]}
-                >
-                  <TextArea
-                    rows={6}
-                    placeholder="Hello Anisur, I’d like to discuss a project..."
-                    className="resize-none py-2 rounded-md border-gray-300 focus:border-black hover:border-black"
-                  />
-                </Form.Item>
-
-                <Form.Item>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    size="large"
-                    block
-                    loading={isSubmitting}
-                    style={{
-                      backgroundColor: primaryColor,
-                      border: "none",
-                      height: "48px",
-                      fontWeight: 500,
-                    }}
-                  >
-                    {isSubmitting ? "Sending..." : "Send Message"}
-                  </Button>
-                </Form.Item>
-              </Form>
-            </Card>
-          </motion.div>
+                  required
+                  rows={6}
+                  placeholder="Tell me about the role, team, or project..."
+                  className="input-field resize-none"
+                />
+              </label>
+            </div>
+            <button type="submit" className="btn-primary mt-6 w-full">
+              {status === "sent" ? "Opening your email app..." : "Send message"}
+            </button>
+            <p className="mt-3 text-xs text-muted">
+              This opens your email client so the message goes directly to me.
+            </p>
+          </motion.form>
         </div>
       </div>
     </section>

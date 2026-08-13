@@ -1,14 +1,11 @@
+"use client";
+
+import type { ComponentType } from "react";
 import { motion } from "framer-motion";
-import { Typography } from "antd";
 import * as DevIcons from "devicons-react";
+import SectionHeader from "@/components/SectionHeader";
 
-const { Title, Paragraph } = Typography;
-
-// Make technologyIconMap type-safe
-const technologyIconMap: Record<
-  string,
-  React.ComponentType<{ size: string }>
-> = {
+const technologyIconMap: Record<string, ComponentType<{ size: string }>> = {
   JavaScript: DevIcons.JavascriptOriginal,
   TypeScript: DevIcons.TypescriptOriginal,
   "React.js": DevIcons.ReactOriginal,
@@ -32,7 +29,7 @@ const technologyIconMap: Record<
 
 const skillCategories = [
   {
-    title: "Frontend Development",
+    title: "Frontend",
     skills: [
       { name: "JavaScript", level: 90 },
       { name: "TypeScript", level: 85 },
@@ -47,7 +44,7 @@ const skillCategories = [
     ],
   },
   {
-    title: "Backend Development",
+    title: "Backend",
     skills: [
       { name: "Node.js", level: 80 },
       { name: "Express.js", level: 85 },
@@ -55,7 +52,7 @@ const skillCategories = [
     ],
   },
   {
-    title: "Database & Storage",
+    title: "Data",
     skills: [
       { name: "MongoDB", level: 80 },
       { name: "MySQL", level: 60 },
@@ -63,7 +60,7 @@ const skillCategories = [
     ],
   },
   {
-    title: "Tools & Technologies",
+    title: "Tooling",
     skills: [
       { name: "Git", level: 85 },
       { name: "Docker", level: 75 },
@@ -72,143 +69,86 @@ const skillCategories = [
   },
 ];
 
-// Helper function to get icon safely
-const getTechnologyIcon = (tech: string) => {
+function getTechnologyIcon(tech: string) {
   const IconComponent = technologyIconMap[tech];
-  if (IconComponent) return <IconComponent size="28px" />;
+  if (IconComponent) return <IconComponent size="22px" />;
   return <span className="text-xs font-bold">{tech.charAt(0)}</span>;
-};
-
-function SkillRing({ name, level }: { name: string; level: number }) {
-  const getLevelText = () => {
-    if (level >= 85) return "Expert";
-    if (level >= 70) return "Intermediate";
-    return "Beginner";
-  };
-
-  return (
-    <motion.div
-      whileHover={{ scale: 1.08 }}
-      className="flex flex-col items-center justify-center relative w-28 h-28"
-    >
-      <svg className="absolute w-28 h-28 transform -rotate-90">
-        <circle
-          cx="56"
-          cy="56"
-          r="50"
-          stroke="rgba(229,231,235,0.6)"
-          strokeWidth="8"
-          fill="none"
-        />
-        <motion.circle
-          cx="56"
-          cy="56"
-          r="50"
-          stroke="url(#grad)"
-          strokeWidth="8"
-          fill="none"
-          strokeLinecap="round"
-          initial={{ strokeDasharray: "0, 314" }}
-          whileInView={{ strokeDasharray: `${(314 * level) / 100}, 314` }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-          viewport={{ once: true }}
-        />
-        <defs>
-          <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#111827" />
-            <stop offset="100%" stopColor="#4b5563" />
-          </linearGradient>
-        </defs>
-      </svg>
-      <div className="z-10 flex flex-col items-center">
-        <div className="text-gray-800">{getTechnologyIcon(name)}</div>
-        <span className="text-xs mt-1 text-gray-700 font-medium">{name}</span>
-        <span className="text-[10px] text-gray-500">{level}%</span>
-        <span className="mt-1 text-[10px] px-2 py-0.5 bg-gray-100 border border-gray-300 rounded-full text-gray-600">
-          {getLevelText()}
-        </span>
-      </div>
-    </motion.div>
-  );
 }
 
-export default function SkillsSection({ active }: { active: boolean }) {
+function levelLabel(level: number) {
+  if (level >= 85) return "Expert";
+  if (level >= 70) return "Strong";
+  return "Working";
+}
+
+export default function SkillsSection() {
   return (
-    <section
-      id="skills"
-      className={`relative overflow-hidden ${active ? "block" : "hidden"}`}
-      style={{
-        background: "linear-gradient(to bottom, #ffffff, #f9fafb)",
-        paddingTop: "100px",
-        paddingBottom: "100px",
-        scrollMarginTop: "64px",
-      }}
-    >
-      <div className="max-w-6xl mx-auto px-6">
-        {/* Section Heading */}
-        <div className="text-center mb-16">
-          <span className="text-gray-600 font-semibold tracking-wide uppercase">
-            My Expertise
-          </span>
-          <Title
-            level={2}
-            className="text-gray-900 mt-3 text-4xl md:text-5xl font-extrabold"
-          >
-            Skills & Technologies
-          </Title>
-          <div className="w-24 h-1 bg-gray-900 mx-auto mt-4 rounded-full" />
-        </div>
+    <section id="skills" className="relative py-24 md:py-32 px-4 md:px-8">
+      <div className="mx-auto max-w-6xl">
+        <SectionHeader
+          index="03"
+          eyebrow="Capabilities"
+          title="A stack ready for production teams."
+          description="Nearly four years of professional work across frontend craft, backend logic, and production tooling — ready to contribute in a German engineering team."
+        />
 
-        {/* Intro */}
-        <div className="max-w-3xl mx-auto mb-16">
-          <Paragraph className="text-gray-600 text-lg leading-relaxed text-center">
-            With nearly 4 years of professional experience, I specialize in{" "}
-            <strong>scalable, high-performing web applications</strong> by
-            combining strong frontend design with powerful backend logic.
-          </Paragraph>
-        </div>
-
-        {/* Skill Categories */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {skillCategories.map((category, index) => (
             <motion.div
-              key={index}
-              className="p-8 rounded-2xl bg-white/90 backdrop-blur border border-gray-300 transition-all"
+              key={category.title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.45, delay: index * 0.08 }}
+              className="rounded-3xl border border-border bg-white/[0.03] p-6 md:p-8"
             >
-              <div className="flex items-center mb-8">
-                <div className="w-2 h-8 bg-gray-900 rounded mr-3"></div>
-                <Title
-                  level={3}
-                  className="m-0 text-gray-900 text-lg font-semibold tracking-wide"
-                >
+              <div className="mb-6 flex items-center gap-3">
+                <span className="h-6 w-1 rounded-full bg-accent" />
+                <h3 className="font-display text-xl font-semibold">
                   {category.title}
-                </Title>
+                </h3>
               </div>
-              <div className="flex flex-wrap gap-6 justify-center">
-                {category.skills.map(({ name, level }) => (
-                  <SkillRing key={name} name={name} level={level} />
+
+              <div className="space-y-4">
+                {category.skills.map((skill) => (
+                  <div key={skill.name} className="group">
+                    <div className="mb-2 flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white">
+                          {getTechnologyIcon(skill.name)}
+                        </div>
+                        <span className="text-sm font-medium">{skill.name}</span>
+                      </div>
+                      <span className="text-xs text-muted">
+                        {levelLabel(skill.level)}
+                      </span>
+                    </div>
+                    <div className="h-1.5 overflow-hidden rounded-full bg-white/5">
+                      <motion.div
+                        className="h-full rounded-full bg-gradient-to-r from-accent to-accent-2"
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${skill.level}%` }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.9, ease: "easeOut" }}
+                      />
+                    </div>
+                  </div>
                 ))}
               </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Soft Skills */}
         <motion.div
-          className="mt-20 p-8 bg-gray-50 rounded-2xl border border-gray-300"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
           viewport={{ once: true }}
+          className="mt-8 rounded-3xl border border-border bg-white/[0.03] p-8"
         >
-          <Title level={4} className="text-gray-800 mb-6 text-center font-bold">
-            Soft Skills
-          </Title>
-          <div className="flex flex-wrap justify-center gap-4">
+          <h3 className="text-center font-display text-lg font-semibold">
+            How I work
+          </h3>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
             {[
               "Teamwork & Collaboration",
               "Problem Solving",
@@ -216,13 +156,12 @@ export default function SkillsSection({ active }: { active: boolean }) {
               "Adaptability",
               "Analytical Thinking",
             ].map((skill) => (
-              <motion.span
+              <span
                 key={skill}
-                whileHover={{ scale: 1.1, y: -2 }}
-                className="px-5 py-2 bg-white border border-gray-300 rounded-full text-sm text-gray-700 font-medium"
+                className="rounded-full border border-border bg-bg-elevated px-4 py-2 text-sm text-muted hover:text-accent hover:border-accent/40 transition-colors"
               >
                 {skill}
-              </motion.span>
+              </span>
             ))}
           </div>
         </motion.div>
