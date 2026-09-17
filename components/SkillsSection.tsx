@@ -20,6 +20,7 @@ const technologyIconMap: Record<string, ComponentType<{ size: string }>> = {
   "Express.js": DevIcons.ExpressOriginal,
   ".NET Core": DevIcons.DotnetcorePlain,
   MongoDB: DevIcons.MongodbPlain,
+  PostgreSQL: DevIcons.PostgresqlOriginal,
   MySQL: DevIcons.MysqlOriginal,
   "SQL Server": DevIcons.MicrosoftsqlserverPlain,
   Git: DevIcons.GitPlain,
@@ -55,6 +56,7 @@ const skillCategories = [
     title: "Data",
     skills: [
       { name: "MongoDB", level: 80 },
+      { name: "PostgreSQL", level: 75 },
       { name: "MySQL", level: 60 },
       { name: "SQL Server", level: 60 },
     ],
