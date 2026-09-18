@@ -256,9 +256,8 @@ export default function HomeSection({ onNavigate }: HomeSectionProps) {
               Get in touch
             </button>
             <a
-              href="https://drive.google.com/file/d/1UdQKpJHBLMAf6Sus04yq_hiJWjwnSdW2/view?usp=drive_link"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/Anisur_Rahman_Arzu_Resume.pdf"
+              download="Anisur_Rahman_Arzu_Resume.pdf"
               className="btn-ghost !px-5 !py-2.5 text-sm"
             >
               Download CV

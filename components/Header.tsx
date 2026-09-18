@@ -71,9 +71,8 @@ export default function Header({ activeSection, onNavigate }: HeaderProps) {
 
           <div className="flex items-center gap-2">
             <a
-              href="https://drive.google.com/file/d/1UdQKpJHBLMAf6Sus04yq_hiJWjwnSdW2/view?usp=drive_link"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/Anisur_Rahman_Arzu_Resume.pdf"
+              download="Anisur_Rahman_Arzu_Resume.pdf"
               className="hidden sm:inline-flex rounded-full bg-white/5 px-4 py-2 text-sm font-medium text-text hover:bg-accent hover:text-[#04110c] transition-colors"
             >
               Resume
