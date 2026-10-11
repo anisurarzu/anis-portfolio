@@ -52,6 +52,39 @@ const technologyIconMap: Record<string, ComponentType<{ size: string }>> = {
 
 const projects: Project[] = [
   {
+    title: "Sushi D'or",
+    category: "Hospitality",
+    description:
+      "A French client restaurant platform for Annemasse & Thonon-les-Bains — online ordering, Stripe payments, kitchen ticket printing, and full European restaurant ops.",
+    duration: "2026 – Present",
+    impact: "France · Haute-Savoie client",
+    achievements: [
+      "Built a complete restaurant stack: public menu storefront, cart/checkout, Stripe online payments, and order tracking for a French sushi brand.",
+      "Shipped admin operations covering products, categories, add-ons, customers, orders, payments, discounts, delivery zones, opening hours, and role-based staff access.",
+      "Implemented automatic kitchen ticket generation (Epson ePOS / ESC-POS print station) so paid orders print to the restaurant floor without manual re-entry.",
+      "Delivered European restaurant essentials — reservations, analytics, audit logs, multi-channel order types (dine-in, takeaway, delivery), and a bilingual-ready French UX.",
+    ],
+    technologies: [
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "React.js",
+      "PostgreSQL",
+      "Prisma",
+      "Stripe",
+      "REST API",
+      "Vercel",
+    ],
+    link: "https://www.sushidora.fr/",
+    isLive: true,
+    images: [
+      "/images/sushidor-1.jpg",
+      "/images/sushidor-2.jpg",
+      "/images/sushidor-3.jpg",
+      "/images/sushidor-4.jpg",
+    ],
+  },
+  {
     title: "Taskivo",
     category: "SaaS",
     description:
@@ -523,7 +556,7 @@ function ProjectMedia({
     >
       <AnimatePresence mode="wait">
         <motion.div
-          key={project.images[index]}
+          key={`${project.title}-media-${index}`}
           initial={{ opacity: 0, scale: 1.04 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
@@ -805,7 +838,7 @@ function ProjectModal({
           {!failed ? (
             <AnimatePresence mode="wait">
               <motion.div
-                key={project.images[slide]}
+                key={`${project.title}-slide-${slide}`}
                 initial={{ opacity: 0, x: 24 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -24 }}
@@ -1016,7 +1049,7 @@ export default function ProjectsSection() {
         </div>
 
         <AnimatePresence mode="popLayout">
-          <motion.div layout className="space-y-6">
+          <motion.div key={`featured-${filter}`} layout className="space-y-6">
             {featured.map((project, index) => (
               <FeaturedProject
                 key={`${filter}-${project.title}`}
@@ -1029,6 +1062,7 @@ export default function ProjectsSection() {
 
           {rest.length > 0 && (
             <motion.div
+              key={`rest-${filter}`}
               layout
               className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
             >
@@ -1047,7 +1081,11 @@ export default function ProjectsSection() {
 
       <AnimatePresence>
         {selected && (
-          <ProjectModal project={selected} onClose={() => setSelected(null)} />
+          <ProjectModal
+            key={selected.title}
+            project={selected}
+            onClose={() => setSelected(null)}
+          />
         )}
       </AnimatePresence>
     </section>

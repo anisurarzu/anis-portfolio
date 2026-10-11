@@ -34,7 +34,7 @@ const tech = [
 
 const stats = [
   { value: 4, suffix: "+", label: "Years" },
-  { value: 9, suffix: "+", label: "Products" },
+  { value: 10, suffix: "+", label: "Products" },
   { value: 2, suffix: "K+", label: "Users" },
   { value: 5, suffix: "+", label: "Enterprises" },
 ];
